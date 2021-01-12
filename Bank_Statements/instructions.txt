@@ -1,0 +1,1 @@
+Place all pdf bank statements in this directory so the application can parse it.
