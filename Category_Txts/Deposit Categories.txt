@@ -1,0 +1,5 @@
+//specify category names with keywords with following format
+//category name - keyword1, keyword2, ...
+//category name - keyword
+scratchers - ca lot
+credit card sales - bofa merch

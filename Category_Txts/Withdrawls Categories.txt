@@ -1,0 +1,11 @@
+//specify category names with keywords with following format
+//category name - keyword1, keyword2, ...
+//category name - keyword
+credit - citi card, discover, wells fargo, bk of am crd, american express, BARCLAYCARD, CHASE CREDIT CRD, SCDIS, Online Banking, Sams BRC, APPLECARD
+lottery purchase from bank - LOTTERY LOTTO, CA LOT SCRATCHER
+merchant fee from bank to ac - BOFA MERCH SVCS
+security alarm - PROTECTION
+telephone and internet - TIME WARNER
+irs - irs des
+sales tax - CA DEPT TAX FEE
+FRANCHISE TAX BOARD FROM BANK A/C - FRANCHISE TAX
