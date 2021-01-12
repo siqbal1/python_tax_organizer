@@ -21,8 +21,7 @@ venv
 node_modules
 .sass-cache
 
-.pdf
-.json
-.pickle
+*.pdf
+*.json
+*.pickle
 .vscode/
-
