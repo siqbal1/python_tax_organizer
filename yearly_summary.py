@@ -87,8 +87,8 @@ class YearlySummary:
         if month in self.monthly_summaries:
             return self.monthly_summaries[month]
 
-        if month in MONTH_NAMES:
-            return self.monthly_summaries[MONTH_NAMES[month]]
+        if str(month).upper() in MONTH_NAMES:
+            return self.monthly_summaries[MONTH_NAMES[str(month).upper()]]
 
         return None
 
@@ -163,6 +163,8 @@ class YearlySummary:
         Makes a spreadsheet in json for google sheets api
         return SpreadsheetJSON
         """
+        print(self.monthly_summaries)
+
         sheets_json = []
 
         # create sheets for each categories for deposits, withdrawls, and checks
@@ -173,7 +175,7 @@ class YearlySummary:
 
         json = {
             "properties": {
-                "title": f"{self.title} {self.getYear()}",
+                "title": f"{self.title}",
             },
             "sheets": sheets_json,
         }

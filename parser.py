@@ -7,9 +7,9 @@ from yearly_summary import YearlySummary
 from category import Category
 from category_list import CategoryList
 
-DEPOSIT_INDICATOR = "Deposits and other credits"
-WITHDRAWL_INDICATOR = "Withdrawals and other debits"
-CHECK_INDICATOR = "Checks"
+DEPOSIT_INDICATORS = set(["deposits and other credits", "deposits and other additions"])
+WITHDRAWL_INDICATORS = set(["withdrawals and other debits", "withdrawals and other subtractions"])
+CHECK_INDICATORS = set(["checks"])
 AMOUNT_REGEX = re.compile("^(-)?\d+\.\d{2}$")
 DATE_REGEX = re.compile("^\d{2}\/\d{2}\/(\d{2}|\d{4})$")
 
@@ -53,13 +53,21 @@ def parse_transaction_string(transaction: str):
     if not transaction:
         return None
 
+    ##print(transaction)
     trans_details = transaction.split()
+    #print(trans_details)
     trans_list = []
     date = ""
     description = ""
     amount = None
 
+    if not trans_details:
+        return None
+
+    #print(1)
+
     if is_valid_date(trans_details[0]):
+        #print(2)
         for string in trans_details:
             if (date and description and amount):
                 trans_list.append(Transaction(date, description.strip(), abs(amount)))
@@ -86,8 +94,10 @@ def parse_transaction_string(transaction: str):
                         description += (string.strip() + " ")
 
     if (date and description and amount):
+        #print(3)
         trans_list.append(Transaction(date, description.strip(), abs(amount)))
 
+    #print(trans_list)
     return trans_list
 
 
@@ -115,26 +125,26 @@ def extract_transaction_summary(pages):
 
         for line in lines:
 
-            if line.lower().strip() == WITHDRAWL_INDICATOR.lower():
+            if line.lower().strip() in WITHDRAWL_INDICATORS:
                 reading_withdrawls = True
                 reading_deposits = False
                 reading_checks = False
 
-                # print("reading withdrawls")
+                # #print("reading withdrawls")
 
-            if line.lower().strip() == DEPOSIT_INDICATOR.lower():
+            if line.lower().strip() in DEPOSIT_INDICATORS:
                 reading_withdrawls = False
                 reading_deposits = True
                 reading_checks = False
 
-                # print("reading deposits")
+                # #print("reading deposits")
 
-            if line.lower().strip() == CHECK_INDICATOR.lower() and reading_withdrawls:
+            if line.lower().strip() in CHECK_INDICATORS and reading_withdrawls:
                 reading_withdrawls = False
                 reading_deposits = False
                 reading_checks = True
 
-                # print("reading checks")
+                # #print("reading checks")
 
             trans_list = parse_transaction_string(line)
 
@@ -146,16 +156,17 @@ def extract_transaction_summary(pages):
                 elif reading_checks:
                     transaction_summary.addChecks(trans_list)
 
-                    # print(transaction_summary)
+                    # #print(transaction_summary)
     return transaction_summary
 
     # for trans in transaction_summary.deposits:
-    #     print(trans)
+    #     #print(trans)
 
 
 def parse_pdf_statement(file_path: str):
     with pdfplumber.open(file_path) as pdf:
         monthly_transactions = extract_transaction_summary(pdf.pages)
+        print(monthly_transactions)
         return monthly_transactions
 
 
@@ -177,8 +188,9 @@ def parse_pdf_statements_from_directory(dir_path: str):
     yearly_summary = YearlySummary()
 
     for file_path in file_list:
-        print(file_path)
+        #print(file_path)
         monthly_transactions = parse_pdf_statement(file_path)
+        #print(monthly_transactions)
         yearly_summary.addSummary(monthly_transactions)
 
     return yearly_summary
